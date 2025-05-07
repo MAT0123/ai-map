@@ -5,6 +5,11 @@
   --foreground: #171717;
 }
 
+.leaflet-container {
+  height: 70vh;
+  width: 100%;
+  border-radius: 0.5rem;
+}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
