@@ -156,7 +156,7 @@ Make sure to include specific lat/lng coordinates for each suggested location th
     }
     
     // For suggested locations, if any are missing lat/lng, generate them
-    const suggestedLocations = parsedContent.suggestedLocations.map((loc, index) => {
+    const suggestedLocations = parsedContent.suggestedLocations.map((loc: { lat: any; lng: any }, index: number) => {
       // If location is missing coordinates, generate some based on the original location
       if (!loc.lat || !loc.lng) {
         const offsetLat = 0.002 * (index + 1) * (index % 2 === 0 ? 1 : -1)
