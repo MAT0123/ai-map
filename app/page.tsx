@@ -6,14 +6,12 @@ import LocationSearch from '@/app/components/LocationSearch'
 import AIAnalyzer from '@/app/components/AIAnalyzer'
 import { Location, Marker, SuggestedLocation } from '@/app/types'
 
-// Import map component dynamically to avoid SSR issues
 const MapComponent = dynamic(() => import('@/app/components/MapComponent'), {
   ssr: false,
   loading: () => <div className="h-[70vh] w-full bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">Loading Map...</div>
 })
 
 export default function Home() {
-  // Set initial location to Yonge & Lawrence in Toronto
   const [location, setLocation] = useState<Location>({ 
     lat: 43.725092, 
     lng: -79.402195 
@@ -34,22 +32,19 @@ export default function Home() {
     setLocation(loc)
     setLocationName(name)
     
-    // Reset markers and add the new location
     setMarkers([{
       position: loc,
       name: name,
       type: 'primary'
     }])
 
-    // Clear previous analysis
     setAiAnalysis('')
-    setLoading(false) // Make sure loading is false after search
+    setLoading(false) 
   }
 
   const handleAIAnalysis = (analysis: string, suggestedLocations: SuggestedLocation[]) => {
     setAiAnalysis(analysis)
     
-    // Add suggested locations as markers
     if (suggestedLocations && suggestedLocations.length) {
       const newMarkers: Marker[] = suggestedLocations.map(loc => ({
         position: { lat: loc.lat, lng: loc.lng },
@@ -57,14 +52,12 @@ export default function Home() {
         type: 'suggestion'
       }))
       
-      // Keep the primary marker and add suggestions
       setMarkers([...markers.filter(m => m.type === 'primary'), ...newMarkers])
     }
     
-    setLoading(false) // Ensure loading is set to false
+    setLoading(false) 
   }
 
-  // Add a new function to handle when analysis starts
   const handleAnalysisStart = () => {
     setLoading(true)
   }
@@ -81,7 +74,7 @@ export default function Home() {
         <div className="lg:col-span-2">
           <MapComponent 
             center={location} 
-            zoom={15} // Set a higher zoom level for better initial view
+            zoom={15} 
             markers={markers}
           />
         </div>
@@ -91,7 +84,7 @@ export default function Home() {
             location={location}
             locationName={locationName}
             onAnalysisComplete={handleAIAnalysis}
-            onAnalysisStart={handleAnalysisStart} // Pass the new handler
+            onAnalysisStart={handleAnalysisStart} 
             loading={loading}
             analysis={aiAnalysis}
           />

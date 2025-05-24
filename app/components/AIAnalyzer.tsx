@@ -27,7 +27,6 @@ export default function AIAnalyzer({
   const getAnalysis = async () => {
     if (!location || !locationName) return
     
-    // Signal that analysis is starting
     if (onAnalysisStart) {
       onAnalysisStart();
     }
@@ -36,7 +35,6 @@ export default function AIAnalyzer({
     setError(null)
     
     try {
-      // Call the API endpoint
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: {
@@ -59,12 +57,10 @@ export default function AIAnalyzer({
         throw new Error(data.error)
       }
       
-      // Process the real AI-generated data
       onAnalysisComplete(data.analysis, data.suggestedLocations)
     } catch (err) {
       console.error('Analysis error:', err)
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
-      // Use fallback data in case of error
       onAnalysisComplete(
         `Unable to analyze ${locationName} due to an error. Please try again later.`,
         []

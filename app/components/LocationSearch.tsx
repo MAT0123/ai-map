@@ -21,7 +21,6 @@ export default function LocationSearch({ onLocationFound }: LocationSearchProps)
     setError(null)
     
     try {
-      // Using OpenStreetMap Nominatim for geocoding
       const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
         params: {
           q: query,

@@ -15,7 +15,6 @@ export async function POST(request: Request) {
       } as AnalysisResponse, { status: 400 })
     }
     
-    // Prepare the prompt based on the analysis type
     let prompt = ''
     switch (analysisType) {
       case 'tourism':
@@ -111,7 +110,6 @@ Example of expected format:
 Make sure to include specific lat/lng coordinates for each suggested location that are near the main location but slightly different from the original coordinates.`
     }
     
-    // Initialize the Gemini API
     const apiKey = process.env.GEMINI_API_KEY
     
     if (!apiKey) {
@@ -120,27 +118,20 @@ Make sure to include specific lat/lng coordinates for each suggested location th
     
     const genAI = new GoogleGenerativeAI(apiKey)
     
-    // Get the Gemini model
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash-latest"
     })
     
-    // Generate content with Gemini
     const result = await model.generateContent(prompt)
     const response = await result.response
     const textContent = response.text()
     
-    // Parse the content as JSON
     let parsedContent
     try {
-      // Clean the response if it contains markdown code blocks
       let cleanedContent = textContent
       
-      // Remove markdown code block syntax if present
       if (textContent.includes('```')) {
-        // Remove the first line if it's ```json
         cleanedContent = textContent.replace(/```json\n/, '')
-        // Remove any trailing backticks
         cleanedContent = cleanedContent.replace(/```\s*$/, '')
       }
       
@@ -150,14 +141,11 @@ Make sure to include specific lat/lng coordinates for each suggested location th
       throw new Error('Invalid response format from Gemini')
     }
     
-    // Ensure the response has the expected format
     if (!parsedContent.analysis || !Array.isArray(parsedContent.suggestedLocations)) {
       throw new Error('Response from Gemini does not have the expected format')
     }
     
-    // For suggested locations, if any are missing lat/lng, generate them
     const suggestedLocations = parsedContent.suggestedLocations.map((loc: { lat: any; lng: any }, index: number) => {
-      // If location is missing coordinates, generate some based on the original location
       if (!loc.lat || !loc.lng) {
         const offsetLat = 0.002 * (index + 1) * (index % 2 === 0 ? 1 : -1)
         const offsetLng = 0.003 * (index + 1) * (index % 3 === 0 ? 1 : -1)

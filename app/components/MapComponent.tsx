@@ -68,7 +68,6 @@ export default function MapComponent({
     return markers
   }, [markers, center])
 
-  // Only render the map on the client-side to avoid the initialization error
   if (!isMounted) {
     return <div className="h-[70vh] w-full bg-gray-200 rounded-lg flex items-center justify-center">Loading Map...</div>
   }
